@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment #naming the deployment
+  labels:
+    app: mongodb
+spec:
+  replicas: 1   #as we need 1 pod for mongoDb deployment
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      volumes:
+        - name: data
+          emptyDir: { }
+      containers:
+      - name: mongodb
+        image: mongodb:v1
+        ports:
+        - name: mongodb
+          containerPort: 27017  #specified port used
+        volumeMounts:           #mount MongoDB container’s internal “/data/db” to a local volume mount point
+        - mountPath: /data/db/
+          name: data
